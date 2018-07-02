@@ -1,0 +1,23 @@
+{
+  "name": "html-terminal",
+  "version": "1.0.0",
+  "description": "A site that has a 'fake' terminal that you can interact with",
+  "main": "index.js",
+  "scripts": {
+	"start": "browser-sync start --server --files \"*\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShabazBadshah/HTML-Terminal.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ShabazBadshah/HTML-Terminal/issues"
+  },
+  "homepage": "https://github.com/ShabazBadshah/HTML-Terminal#readme",
+  "dependencies": {
+    "browser-sync": "^2.24.5"
+  }
+}
