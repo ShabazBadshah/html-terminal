@@ -9,6 +9,11 @@ html, body {
   src: url(fonts/SFMono-Light.otf);
 }
 
+@font-face {
+  font-family: sf-mono-regular;
+  src: url(fonts/SFMono-Regular.otf);
+}
+
 #terminal-wrap {
   height: 100%;
   width: 100%;
@@ -74,7 +79,26 @@ h3#terminal-title {
 }
 
 #terminal-input-window {
-  height: 100%;
-  width: 100%;
-  /* background-color: rgb(54, 54, 54); */
+  height: calc(100% - 15px);
+  width: inherit;
+  position: relative;
+  background-color: #292929;
+}
+
+textarea#terminal-input {
+  resize: none;
+  font-family: sf-mono-light;
+  font-size: 0.9em;
+  background-color: transparent;
+  border: none;
+  user-select: none;
+  width: calc(100% - 15px);
+  height: calc(100% - 15px);
+  color: white;
+  overflow: hidden; 
+  margin: 5px;
+}
+
+textarea#terminal-input:focus {
+  outline: 0;
 }
