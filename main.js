@@ -5,14 +5,28 @@ $(document).ready(() => {
   let path = "~";
   let currentCommand = "";
 
+  const skillsList = `
+- Languages: Python, Java, Javascript, C
+- Frameworks: Android, React, Node, Express
+- Databases: SQL, Mongo
+- Libraries: jQuery, Sass, Jade (Pug)
+- Version Control: Git
+- Other: REST, AJAX, Bash, LaTeX, HTML, CSS
+  `;
+
   let commands = [
       { "name": "clear", "function": clearTerminal },
-      { "name": "echo", "function": echo },
-      { "name": "help", "function": help}
+      { "name": "echo",  "function": echo },
+      { "name": "help",  "function": help },
+      { "name": "skills",    "function": skills }
   ];
 
   function clearTerminal() {
     terminal.text("");
+  }
+
+  function skills() {
+    terminal.append(skillsList + "\n");
   }
 
   function echo(args) {
@@ -21,7 +35,14 @@ $(document).ready(() => {
   }
 
   function help() {
-    terminal.append(`Supported commands: echo, clear, help \n`);
+    let helpStr = "Supported commands: ";
+    commands.forEach((command, i) => {
+      helpStr += command.name;
+      if (i !== commands.length - 1) helpStr += ", ";
+    });
+
+    helpStr += "\n"
+    terminal.append(helpStr);
   }
 
   function processCommand() {
