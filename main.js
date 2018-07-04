@@ -21,8 +21,44 @@ $(document).ready(() => {
       { "name": "skills", "function": skills }
   ];
 
+  
+  function processCommand() {
+    let isValid = false;
+    let args = currentCommand.split(" ");
+    let cmd = args[0];
+
+    args.shift(); // Removes and returns the first item in the array
+
+    commands.forEach((command, i) => {
+      if (cmd === command.name) {
+        commands[i].function(args);
+        isValid = true;
+      }
+    });
+
+    if (!isValid && currentCommand !== "") terminal.append(`/bin/sh: command not found: ${currentCommand} \ntype 'help' for all supported commands \n`);
+    currentCommand = "";
+    terminal.scrollTop(terminal.prop("scrollHeight")); // Anchors the overflow to the bottom of the terminal
+  }
+
+  function appendCommand(str) {
+    terminal.append(str);
+    currentCommand += str;
+  }
+
+  function displayPrompt() {
+    terminal.append(`<span class="prompt">${prompt}</span> `);
+    terminal.append(`<span class="path">${path}</span> `);
+  }
+
+  function erase(n) {
+    currentCommand = currentCommand.slice(0, -n);
+    terminal.html(terminal.html().slice(0, -n));
+  }
+
   function clearTerminal() {
     terminal.text("");
+    help();
   }
 
   function skills() {
@@ -43,41 +79,6 @@ $(document).ready(() => {
 
     helpStr += "\n"
     terminal.append(helpStr);
-  }
-
-  function processCommand() {
-    let isValid = false;
-    let args = currentCommand.split(" ");
-    let cmd = args[0];
-
-    args.shift(); // Removes and returns the first item in the array
-
-    commands.forEach((command, i) => {
-      if (cmd === command.name) {
-        commands[i].function(args);
-        isValid = true;
-      }
-    });
-
-    if (!isValid && currentCommand !== "") terminal.append(`/bin/sh: command not found: ${currentCommand} \ntype 'help' for all supported commands \n`);
-    currentCommand = "";
-    terminal.scrollTop(terminal.prop("scrollHeight")); // Anchors the overflow to the bottom of the terminal
-  }
-
-  
-  function appendCommand(str) {
-    terminal.append(str);
-    currentCommand += str;
-  }
-
-  function displayPrompt() {
-    terminal.append(`<span class="prompt">${prompt}</span> `);
-    terminal.append(`<span class="path">${path}</span> `);
-  }
-
-  function erase(n) {
-    currentCommand = currentCommand.slice(0, -n);
-    terminal.html(terminal.html().slice(0, -n));
   }
 
   // Terminal controls and spacebar control
