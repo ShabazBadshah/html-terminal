@@ -6,12 +6,12 @@ $(document).ready(() => {
   let currentCommand = "";
 
   const skillsList = `
-- Languages: Python, Java, Javascript, C
+- Languages:  Python, Java, Javascript, C
 - Frameworks: Android, React, Node, Express
-- Databases: SQL, Mongo
-- Libraries: jQuery, Sass, Jade (Pug)
-- Version Control: Git
-- Other: REST, AJAX, Bash, LaTeX, HTML, CSS
+- Databases:  SQL, Mongo
+- Libraries:  jQuery, Sass, Jade (Pug)
+- Other:      REST, AJAX, Bash, LaTeX, HTML, CSS
+- VC:         Git
   `;
 
   let commands = [
@@ -59,7 +59,7 @@ $(document).ready(() => {
       }
     });
 
-    if (!isValid && currentCommand !== "") terminal.append(`sh: command not found: ${currentCommand} \n`);
+    if (!isValid && currentCommand !== "") terminal.append(`/bin/sh: command not found: ${currentCommand} \ntype 'help' for all supported commands \n`);
     currentCommand = "";
     terminal.scrollTop(terminal.prop("scrollHeight")); // Anchors the overflow to the bottom of the terminal
   }
