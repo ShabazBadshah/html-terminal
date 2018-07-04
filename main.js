@@ -15,10 +15,10 @@ $(document).ready(() => {
   `;
 
   let commands = [
-      { "name": "clear", "function": clearTerminal },
-      { "name": "echo",  "function": echo },
-      { "name": "help",  "function": help },
-      { "name": "skills",    "function": skills }
+      { "name": "clear",  "function": clearTerminal },
+      { "name": "echo",   "function": echo },
+      { "name": "help",   "function": help },
+      { "name": "skills", "function": skills }
   ];
 
   function clearTerminal() {
