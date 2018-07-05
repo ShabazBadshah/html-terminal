@@ -69,34 +69,7 @@ html, body {
 
 h3#terminal-title {
   font-family: sf-mono-light;
-  font-size: 0.9em;
-  font-weight: 100;
-  margin: 5px auto;
-  color: white;
-}
-
-#red-btn, #green-btn, #yellow-btn {
-  border-radius: 10px;
-  height: 12px;
-  width: 12px;
-  margin-left: 5px;
-}
-
-#red-btn {
-  background-color: #FF554E;
-}
-
-#green-btn {
-  background-color: #2ACB42;
-}
-
-#yellow-btn {
-  background-color: #FFC12E;
-}
-
-h3#terminal-title {
-  font-family: sf-mono-light;
-  font-size: 0.9em;
+  font-size: 0.8em;
   font-weight: 100;
   margin: 5px auto;
   color: white;

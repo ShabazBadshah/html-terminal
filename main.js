@@ -23,16 +23,17 @@ $(document).ready(() => {
       { "name": "skills", "function": skills },
       { "name": "ls",     "function": listDir },
       { "name": "cd",     "function": changeDir },
+      { "name": "cat",    "function": cat },
   ];
 
   const dirs = [
     { name: 'home', isDir: true, 
       'files': [
+        { name: 'projects',    isDir: true },
+        { name: 'blog',        isDir: true },
         { name: 'about.txt',   isDir: false }, 
         { name: 'resume.pdf',  isDir: false }, 
         { name: 'contact.txt', isDir: false },
-        { name: 'projects',    isDir: true },
-        { name: 'blog',        isDir: true }
       ] 
     },
     { name: 'projects', isDir: true, 
@@ -49,6 +50,13 @@ $(document).ready(() => {
         { name: "Blog article C", isDir: false, link: "google.ca"}
       ]
     },
+    { name: 'test', isDir: true, 
+      'files': [
+        { name: "Project A", isDir: false, description: "desc A", link: "google.ca"},
+        { name: "Project B", isDir: false, description: "desc B", link: "google.ca"},
+        { name: "Project C", isDir: false, description: "desc C", link: "google.ca"}
+      ]
+    } 
   ];
 
   function doesFileExist(dirName) {
@@ -103,16 +111,48 @@ $(document).ready(() => {
     } else terminal.append(`cd: ${dirName}: No such file or directory \n`);
   }
 
+  function catFile(fileName) {
+    switch(fileName) {
+      case 'about.txt': {
+        terminal.append(`cat about.txt\n`);
+        break;
+      }
+      case 'resume.pdf': {
+        terminal.append(`cat resume.txt\n`);
+        break;
+      }
+      case 'contact.txt': {
+        terminal.append(`cat contact.txt\n`);
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  }
+
+  function cat(fileName) {
+    if (fileName === undefined || fileName.length === 0 || fileName[0] === "" || fileName.length >= 2) {
+      terminal.append("cat: please enter a single file name\n");
+      return;
+    } else if (doesFileExist(fileName[0])) {
+      fileName = fileName[0];
+      if (isDir(fileName)) terminal.append(`cat: ${fileName}: Is a directory\n`);
+      else catFile(fileName); // Cat a file
+    } else terminal.append(`cat: ${fileName}: No such file or directory \n`);
+  }
+
   function list(dirName) {
     dirs.forEach((dir, idx) => { // Regular directory
       if (dir.name === dirName) { // Listing the directory requested
+        terminal.append('\n');
         dir.files.forEach((file, idx) => {
-          if (file.isDir) terminal.append(` <span id="dir">${file.name}</span>\n`);
-          else terminal.append(` ${file.name}\n`);
+          if (file.isDir) terminal.append(`<span id="dir">${file.name}</span>\n`);
+          else terminal.append(`${file.name}\n`);
         });
       }
-      return;
     });
+    terminal.append('\n');
   }
 
   function listDir(dirName) {
