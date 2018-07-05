@@ -2,10 +2,10 @@ $(document).ready(() => {
   let terminal = $("#terminal-input-window");
   let username = "badsh";
   let prompt = `${username}@term >`;
-  let path = "~";
+  let path = "home";
   let currentCommand = "";
   let currentDir = "home";
-  let currentDirFolders = [];
+  let parentDir = "/";
 
   const skillsList = `
 - Languages:  Python, Java, Javascript, C
@@ -26,69 +26,117 @@ $(document).ready(() => {
   ];
 
   const dirs = [
-    { name: 'home', 'files': ['about.txt', 'resume.pdf', 'contact.txt', 'projects', 'blog'] },
-    { name: 'projects', 'files': 
-      [
-        { name: "Project A", description: "desc A", link: "google.ca"},
-        { name: "Project B", description: "desc A", link: "google.ca"},
-        { name: "Project C", description: "desc A", link: "google.ca"}
+    { name: 'home', isDir: true, 
+      'files': [
+        { name: 'about.txt',   isDir: false }, 
+        { name: 'resume.pdf',  isDir: false }, 
+        { name: 'contact.txt', isDir: false },
+        { name: 'projects',    isDir: true },
+        { name: 'blog',        isDir: true }
+      ] 
+    },
+    { name: 'projects', isDir: true, 
+      'files': [
+        { name: "Project A", isDir: false, description: "desc A", link: "google.ca"},
+        { name: "Project B", isDir: false, description: "desc B", link: "google.ca"},
+        { name: "Project C", isDir: false, description: "desc C", link: "google.ca"}
       ]
     },
-    { name: 'blog', 'files': 
-      [
-        { name: "Blog article A", link: "google.ca"},
-        { name: "Blog article B", link: "google.ca"},
-        { name: "Blog article C", link: "google.ca"}
+    { name: 'blog', isDir: true, 
+      'files': [
+        { name: "Blog article A", isDir: false, link: "google.ca"},
+        { name: "Blog article B", isDir: false, link: "google.ca"},
+        { name: "Blog article C", isDir: false, link: "google.ca"}
       ]
     },
-  ]
+  ];
 
-  function changeDir(dirName) {
-
+  function doesFileExist(dirName) {
+    let exists = false;
+    dirs.map((dir) => {
+      dir.files.map((file) => {
+        if (file.name.toLowerCase().trim() === dirName.toLowerCase().trim()) {
+          exists = true;
+        }
+      })
+    });
+    return exists;
   }
 
-  function isDir(dirName) {
-    return currentDirFolders.some((file) => {
-      return file.name === dirName;
-    }); 
+  function isDir(fileName) {
+    let isDir = false;
+    dirs.map((dir) => {
+      dir.files.map((file) => {
+        if (file.name.toLowerCase().trim() === fileName.toLowerCase().trim() && file.isDir) {
+          isDir = true;
+        }
+      })
+    });
+    return isDir;
+  }
+
+  function changeDir(dirName) {
+    if (dirName === undefined || dirName.length === 0 || dirName[0] === "" || dirName.length >= 2) {
+      terminal.append("cd: please enter a single directory name \n");
+      return;
+    }
+
+    dirName = dirName[0].trim();
+
+    if (dirName === "..") {
+      console.log(currentDir);
+      currentDir = parentDir;
+      path = currentDir;
+      parentDir = "home";
+      listDir("");
+    }
+    else if (dirName === ".") listDir("");
+    else if (doesFileExist(dirName)) {
+      if (!isDir(dirName)) terminal.append(`cd: ${dirName}: Not a directory\n`);
+      else { // A directory
+        currentDir = dirName;
+        path = currentDir;
+        parentDir = "home";
+        listDir("");
+        return;
+      }
+    } else terminal.append(`cd: ${dirName}: No such file or directory \n`);
+  }
+
+  function list(dirName) {
+    dirs.forEach((dir, idx) => { // Regular directory
+      if (dir.name === dirName) { // Listing the directory requested
+        dir.files.forEach((file, idx) => {
+          if (file.isDir) terminal.append(` <span id="dir">${file.name}</span>\n`);
+          else terminal.append(` ${file.name}\n`);
+        });
+      }
+      return;
+    });
   }
 
   function listDir(dirName) {
-
     if (dirName.length >= 2) {
-      terminal.append("ls: can only list directories \n");
+      terminal.append("ls: can only list one directory at a time \n");
       return;
     }
 
     // List current directory if no arguments are given
-    if (dirName === undefined || dirName.length === 0) dirName = currentDir;
-    else dirName = dirName[0];
-    // console.log(dirName);
+    if (dirName === undefined || dirName.length === 0) { 
+      dirName = currentDir;
+      list(dirName);
+    } else if (dirName.length === 1) { // 1 argument
+      dirName = dirName[0];
 
-    // Get list of all files that are directories
-    dirs.forEach((dir, idx) => {
-      currentDirFolders.push(dir);
-    });
-
-    // if (isDir(dirName)) { // Directory 
-
-    // }
-
-    // List files
-    dirs.forEach((dir, idx) => { // Regular directory
-      if (dir.name === dirName) { // List directory
-        
-        dir.files.forEach((file, idx) => {
-          // If the file is a directory
-          if (isDir(file)) terminal.append(`<span id="dir">${file}</span> `);
-          // Normal file
-          else terminal.append(`${file} `);
-          // New line after listing last file
-          if (idx === dir.files.length - 1) terminal.append('\n'); 
-        });
+      if (dirName === ".") list(currentDir);
+      else if (dirName === "..") list(parentDir)
+      else if (!doesFileExist(dirName)) { // If file does not exist
+        terminal.append(`ls: cannot access '${dirName}': No such file or directory \n`);
+      } else { // File exists, can either be a directory or a file
+        if (!isDir(dirName)) terminal.append(`${dirName}\n`);
+        else list(dirName); // A directory
       }
-    });
-    currentDirFolders = [];
+    }
   }
 
   function processCommand() {
@@ -117,7 +165,7 @@ $(document).ready(() => {
 
   function displayPrompt() {
     terminal.append(`<span class="prompt">${prompt}</span> `);
-    terminal.append(`<span class="path">${path}</span> `);
+    terminal.append(`<span id="path">${path}</span> `);
   }
 
   function erase(amountCharsToErase) {
