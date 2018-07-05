@@ -4,6 +4,8 @@ $(document).ready(() => {
   let prompt = `${username}@term >`;
   let path = "~";
   let currentCommand = "";
+  let currentDir = "home";
+  let currentDirFolders = [];
 
   const skillsList = `
 - Languages:  Python, Java, Javascript, C
@@ -18,10 +20,77 @@ $(document).ready(() => {
       { "name": "clear",  "function": clearTerminal },
       { "name": "echo",   "function": echo },
       { "name": "help",   "function": help },
-      { "name": "skills", "function": skills }
+      { "name": "skills", "function": skills },
+      { "name": "ls",     "function": listDir },
+      { "name": "cd",     "function": changeDir },
   ];
 
-  
+  const dirs = [
+    { name: 'home', 'files': ['about.txt', 'resume.pdf', 'contact.txt', 'projects', 'blog'] },
+    { name: 'projects', 'files': 
+      [
+        { name: "Project A", description: "desc A", link: "google.ca"},
+        { name: "Project B", description: "desc A", link: "google.ca"},
+        { name: "Project C", description: "desc A", link: "google.ca"}
+      ]
+    },
+    { name: 'blog', 'files': 
+      [
+        { name: "Blog article A", link: "google.ca"},
+        { name: "Blog article B", link: "google.ca"},
+        { name: "Blog article C", link: "google.ca"}
+      ]
+    },
+  ]
+
+  function changeDir(dirName) {
+
+  }
+
+  function isDir(dirName) {
+    return currentDirFolders.some((file) => {
+      return file.name === dirName;
+    }); 
+  }
+
+  function listDir(dirName) {
+
+    if (dirName.length >= 2) {
+      terminal.append("ls: can only list directories \n");
+      return;
+    }
+
+    // List current directory if no arguments are given
+    if (dirName === undefined || dirName.length === 0) dirName = currentDir;
+    else dirName = dirName[0];
+    // console.log(dirName);
+
+    // Get list of all files that are directories
+    dirs.forEach((dir, idx) => {
+      currentDirFolders.push(dir);
+    });
+
+    // if (isDir(dirName)) { // Directory 
+
+    // }
+
+    // List files
+    dirs.forEach((dir, idx) => { // Regular directory
+      if (dir.name === dirName) { // List directory
+        
+        dir.files.forEach((file, idx) => {
+          // If the file is a directory
+          if (isDir(file)) terminal.append(`<span id="dir">${file}</span> `);
+          // Normal file
+          else terminal.append(`${file} `);
+          // New line after listing last file
+          if (idx === dir.files.length - 1) terminal.append('\n'); 
+        });
+      }
+    });
+    currentDirFolders = [];
+  }
+
   function processCommand() {
     let isValid = false;
     let args = currentCommand.split(" ");
@@ -51,9 +120,9 @@ $(document).ready(() => {
     terminal.append(`<span class="path">${path}</span> `);
   }
 
-  function erase(n) {
-    currentCommand = currentCommand.slice(0, -n);
-    terminal.html(terminal.html().slice(0, -n));
+  function erase(amountCharsToErase) {
+    currentCommand = currentCommand.slice(0, -amountCharsToErase);
+    terminal.html(terminal.html().slice(0, -amountCharsToErase));
   }
 
   function clearTerminal() {

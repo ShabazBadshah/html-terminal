@@ -125,6 +125,10 @@ h3#terminal-title {
   animation: blink 2s steps(1) infinite;
 }
 
+#dir {
+  color: #FF554E;
+}
+
 .prompt {
   color: #2ACB42;
 }
