@@ -5,7 +5,7 @@ $(document).ready(() => {
   let path = "home";
   let currentCommand = "";
   let currentDir = "home";
-  let parentDir = "/";
+  let parentDir = "home";
 
   const skillsList = `
 - Languages:  Python, Java, Javascript, C
@@ -103,7 +103,7 @@ $(document).ready(() => {
       if (!isDir(dirName)) terminal.append(`cd: ${dirName}: Not a directory\n`);
       else { // A directory
         currentDir = dirName;
-        path = currentDir;
+        path = parentDir + "/" + currentDir;
         parentDir = "home";
         listDir("");
         return;
@@ -145,14 +145,12 @@ $(document).ready(() => {
   function list(dirName) {
     dirs.forEach((dir, idx) => { // Regular directory
       if (dir.name === dirName) { // Listing the directory requested
-        terminal.append('\n');
         dir.files.forEach((file, idx) => {
           if (file.isDir) terminal.append(`<span id="dir">${file.name}</span>\n`);
           else terminal.append(`${file.name}\n`);
         });
       }
     });
-    terminal.append('\n');
   }
 
   function listDir(dirName) {
