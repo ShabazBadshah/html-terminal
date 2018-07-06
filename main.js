@@ -245,9 +245,6 @@ $(document).ready(() => {
       e.preventDefault(); // Prevents page from going back
       if (currentCommand !== "") erase(1);
     }
-
-    // Spacebar
-    if (keyCode === 32) appendCommand(String.fromCharCode(keyCode));
   });
 
   // Processes new commands 
