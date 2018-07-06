@@ -20,7 +20,6 @@ $(document).ready(() => {
       { "name": "clear",  "function": clearTerminal },
       { "name": "echo",   "function": echo },
       { "name": "help",   "function": help },
-      { "name": "skills", "function": skills },
       { "name": "ls",     "function": listDir },
       { "name": "cd",     "function": changeDir },
       { "name": "cat",    "function": cat },
@@ -31,7 +30,8 @@ $(document).ready(() => {
       'files': [
         { name: 'projects',    isDir: true },
         { name: 'blog',        isDir: true },
-        { name: 'about.txt',   isDir: false }, 
+        { name: 'about.txt',   isDir: false },
+        { name: 'skills.txt',  isDir: false },
         { name: 'resume.pdf',  isDir: false }, 
         { name: 'contact.txt', isDir: false },
       ] 
@@ -115,6 +115,10 @@ $(document).ready(() => {
     switch(fileName) {
       case 'about.txt': {
         terminal.append(`cat about.txt\n`);
+        break;
+      }
+      case 'skills.txt': {
+        skills();
         break;
       }
       case 'resume.pdf': {
