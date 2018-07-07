@@ -6,6 +6,7 @@ $(document).ready(() => {
   let currentCommand = "";
   let currentDir = "home";
   let parentDir = "home";
+  let terminalTitle = $('#terminal-title');
 
   const skillsList = `
 - Languages:  Python, Java, Javascript, C
@@ -62,11 +63,13 @@ $(document).ready(() => {
   function doesFileExist(dirName) {
     let exists = false;
     dirs.map((dir) => {
-      dir.files.map((file) => {
-        if (file.name.toLowerCase().trim() === dirName.toLowerCase().trim()) {
-          exists = true;
-        }
-      })
+      if (dir.name.toLocaleLowerCase().trim() === currentDir) {
+        dir.files.map((file) => {
+          if (file.name.toLowerCase().trim() === dirName.toLowerCase().trim()) {
+            exists = true;
+          }
+        });
+      }
     });
     return exists;
   }
@@ -89,7 +92,11 @@ $(document).ready(() => {
       return;
     }
 
+    console.log(doesFileExist(dirName[0]));
+
     dirName = dirName[0].trim();
+
+    // console.log(terminalTitle.val());
 
     if (dirName === ".." || dirName=="~") {
       console.log(currentDir);
