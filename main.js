@@ -1,12 +1,11 @@
 $(document).ready(() => {
   let terminal = $("#terminal-input-window");
-  let username = "badsh";
+  let username = "shabaz";
   let prompt = `${username}@term >`;
   let path = "home";
   let currentCommand = "";
   let currentDir = "home";
   let parentDir = "home";
-  let terminalTitle = $('#terminal-title');
 
   const skillsList = `
 - Languages:  Python, Java, Javascript, C
@@ -15,6 +14,20 @@ $(document).ready(() => {
 - Libraries:  jQuery, Sass, Jade (Pug)
 - Other:      REST, AJAX, Bash, LaTeX, HTML, CSS
 - VC:         Git
+  `;
+
+  const aboutText = `
+My name is Shabaz Badshah and I like making cool things!
+- "Always in beta"
+    `;
+
+  const contactText = `
+I like making cool thing! Do you want to make cool things together?
+-------------------------------------------------------------------
+Github: https://github.com/ShabazBadshah
+Website: http://www.shabazbadshah.com
+LinkedIn: https://www.linkedin.com/in/shabaz-badshah/
+Email: badshah.shabaz@gmail.com
   `;
 
   let commands = [
@@ -92,11 +105,7 @@ $(document).ready(() => {
       return;
     }
 
-    console.log(doesFileExist(dirName[0]));
-
     dirName = dirName[0].trim();
-
-    // console.log(terminalTitle.val());
 
     if (dirName === ".." || dirName=="~") {
       console.log(currentDir);
@@ -121,11 +130,11 @@ $(document).ready(() => {
   function catFile(fileName) {
     switch(fileName) {
       case 'about.txt': {
-        terminal.append(`cat about.txt\n`);
+        terminal.append(aboutText + "\n");
         break;
       }
       case 'skills.txt': {
-        skills();
+        terminal.append(skillsList + "\n");
         break;
       }
       case 'resume.pdf': {
@@ -133,7 +142,7 @@ $(document).ready(() => {
         break;
       }
       case 'contact.txt': {
-        terminal.append(`cat contact.txt\n`);
+        terminal.append(contactText + "\n");
         break;
       }
       default: {
@@ -232,10 +241,6 @@ $(document).ready(() => {
     help();
   }
 
-  function skills() {
-    terminal.append(skillsList + "\n");
-  }
-
   function echo(args) {
     let str = args.join(" ");
     terminal.append(str + "\n");
@@ -284,5 +289,8 @@ $(document).ready(() => {
 
   terminal.append(`Logged in as: ${username} on ${date} \n`); 
   help();
+  displayPrompt();
+  terminal.append("\n");
+  listDir("");
   displayPrompt();
 });
