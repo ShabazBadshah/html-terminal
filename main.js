@@ -91,7 +91,7 @@ $(document).ready(() => {
 
     dirName = dirName[0].trim();
 
-    if (dirName === "..") {
+    if (dirName === ".." || dirName=="~") {
       console.log(currentDir);
       currentDir = parentDir;
       path = currentDir;
@@ -201,6 +201,11 @@ $(document).ready(() => {
   }
 
   function appendCommand(str) {
+    if (/[`,<>;':"/[\]|{}()=_+-]/.test(str)) {
+      // Only allows . and ~ characters
+      return;
+    }
+
     terminal.append(str);
     currentCommand += str;
   }
