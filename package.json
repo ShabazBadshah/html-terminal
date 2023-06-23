@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/ShabazBadshah/HTML-Terminal#readme",
   "dependencies": {
-    "browser-sync": "^2.24.5"
+    "browser-sync": "^2.29.3"
   }
 }
